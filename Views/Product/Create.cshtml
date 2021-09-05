@@ -1,0 +1,77 @@
+﻿@model AppProductImages.Models.ProductAddViewModel
+
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<h1>Add Product</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data"> 
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Фото</label>
+                <div class="row" id="contentImage">
+                    <div class="col-md-2">
+                        <img src="/img/add.png"
+                             id="btnAddImage"
+                             style="cursor:pointer"
+                             width="120px" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        window.addEventListener("load", async function () {
+            let btnAddImage = document.getElementById("btnAddImage");
+            let id = 1;
+            btnAddImage.addEventListener("click", function () {
+                //console.log("Нажав");
+                let imageName = "image" + id;
+                id++;
+                let file = $(`<input type="file"
+                                style="display:none"
+                                multiple class="form-control"
+                                id="${imageName}"
+                                name = "PathImage">`);
+                $("#contentImage").prepend(file);
+                document.getElementById(imageName).click();
+                document.getElementById(imageName).onchange = function (e) {
+
+                    for (var i = 0; i < e.target.files.length; i++) {
+                        $("#contentImage").prepend(`
+                            <div class="col-md-2">
+                                <img src="${URL.createObjectURL(e.target.files[i])}"
+                                     width="100%"/>
+                            </div>
+                        `);
+
+                    }
+                }
+            });
+        });
+    </script>
+}
