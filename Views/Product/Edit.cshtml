@@ -1,16 +1,16 @@
-﻿@model AppProductImages.Models.ProductAddViewModel
+﻿@model AppProductImages.Models.ProductItemViewModel
 
 @{
-    ViewData["Title"] = "Add Product";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Add Product</h1>
-
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data"> 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-8 offset-2">
+        <h2 class="text-center">Редагувати товар</h2>
+        <form method="post" enctype="multipart/form-data" asp-controller="Product" asp-action="Edit">
+
+
+            <input type="hidden" asp-for="Id" class="form-control" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -21,19 +21,32 @@
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
+
             <div class="mb-3">
                 <label for="image" class="form-label">Фото</label>
                 <div class="row" id="contentImage">
+                    @foreach (var img in Model.PathImage)
+                    {
+                        <div class="col-md-2">
+                            <img src="/images/@img.Path" width="100%" />
+                            <span class="text-danger align-top deleteitem" style="cursor: pointer">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </div>
+                    }
                     <div class="col-md-2">
                         <img src="/img/add.png"
                              id="btnAddImage"
                              style="cursor:pointer"
                              width="100%" />
                     </div>
+
                 </div>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -44,6 +57,18 @@
 </div>
 
 @section Scripts {
+    <script>
+        $(function () {
+            $(".deleteitem").on("click", function (e) {
+                let $div = $(e.target).closest("div");
+                $div.remove();
+                // додавання інпута який містить посилання нв фотографію яку видалити
+                $("#contentImage").prepend(`<input type="hidden"
+                                        value="${$div.find('img').attr("src")}" name="deletedImages"/>`);
+
+            });
+        });
+    </script>
     <script>
         window.addEventListener("load", async function () {
             let id = 1;
@@ -56,9 +81,9 @@
                 let idName = "image" + id;
                 id++;
                 let file = $(`<input type="file"
-                                    style="display:none"
-                                    multiple class="form-control"
-                                    id="${idName}" name="PathImage">`);
+                                        style="display:none"
+                                        multiple class="form-control"
+                                        id="${idName}" name="PathImage">`);
                 //додаємо інпут в дом дерево - там де знаходяться усі елементи фото
                 $blockImages.prepend(file);
                 //ми додали наш інпут для файлу в дом, тепер мона його отримати
@@ -73,17 +98,17 @@
                         //створюємо дів, для збереження фото
                         //в дів добавляємо хрестик\
                         var $deleteIcon = $(`
-                                <span class="text-danger align-top" style="cursor: pointer">
-                                    <i class="fas fa-times"></i>
-                                </span>`);
+                                    <span class="text-danger align-top" style="cursor: pointer">
+                                        <i class="fas fa-times"></i>
+                                    </span>`);
 
                         //створюємо дів, для збереження фото
                         let $newDiv = $(`
-                            <div class="col-md-2" data-img="${files[i].name}">
-                                <img src="${URL.createObjectURL(files[i])}"
-                                     width="100%"/>
-                            </div>
-                        `);
+                                <div class="col-md-2" data-img="${files[i].name}">
+                                    <img src="${URL.createObjectURL(files[i])}"
+                                         width="100%"/>
+                                </div>
+                            `);
                         //в дів добавляємо хрестик
                         $newDiv.append($deleteIcon);
 

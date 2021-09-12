@@ -10,7 +10,7 @@ WebTestSecirity/Web.config
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
+/products
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
