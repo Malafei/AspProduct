@@ -31,6 +31,9 @@ namespace AppProductImages
             services.AddControllersWithViews();
             services.AddDbContext<AppEFContext>(option =>
                 option.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddLocalization();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

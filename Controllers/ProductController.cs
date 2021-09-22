@@ -57,12 +57,11 @@ namespace AppProductImages.Controllers
                 {
                     var ext = Path.GetExtension(item.FileName);
                     fileName = Path.GetRandomFileName() + ext;
-               var filePath = Path.Combine(Directory.GetCurrentDirectory(),
-                        "products", fileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "products", fileName);
                     using (var stream = System.IO.File.Create(filePath))
-             {
+                    {
                         item.CopyTo(stream);
-               }
+                    }
                     fileNames.Add(fileName);
                 }
             }
